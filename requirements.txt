@@ -1,0 +1,14 @@
+black
+isort
+mypy
+flake8
+pytest
+httpx
+fastapi~=0.115.6
+gunicorn
+uvicorn
+starlette~=0.41.3
+pydantic~=2.10.4
+apexdevkit
+coverage
+ruff
