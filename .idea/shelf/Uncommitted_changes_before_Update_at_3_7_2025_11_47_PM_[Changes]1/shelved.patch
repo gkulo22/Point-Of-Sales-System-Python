@@ -1,0 +1,3 @@
+diff --git a/tests/__init__.py b/app/tests/__init__.py
+rename from tests/__init__.py
+rename to app/tests/__init__.py
