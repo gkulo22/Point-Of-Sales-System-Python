@@ -16,7 +16,8 @@ class TestProductService(unittest.TestCase):
         product_repository = MagicMock(spec=IProductRepository)
         service = ProductService(product_repository=product_repository)
 
-        mock_product = Product(id="prod-1", name="Test Product", barcode="12345", price=10.0, discount=0.0)
+        mock_product = Product(id="prod-1", name="Test Product",
+                               barcode="12345", price=10.0, discount=0.0)
 
         product_repository.has_barcode.return_value = False
         product_repository.create.return_value = mock_product
@@ -32,7 +33,8 @@ class TestProductService(unittest.TestCase):
         product_repository = MagicMock(spec=IProductRepository)
         service = ProductService(product_repository=product_repository)
 
-        mock_product = Product(id="prod-1", name="Test Product", barcode="12345", price=10.0, discount=0.0)
+        mock_product = Product(id="prod-1", name="Test Product",
+                               barcode="12345", price=10.0, discount=0.0)
 
         product_repository.has_barcode.return_value = True
 
@@ -45,7 +47,8 @@ class TestProductService(unittest.TestCase):
         product_repository = MagicMock(spec=IProductRepository)
         service = ProductService(product_repository=product_repository)
 
-        mock_product = Product(id="prod-1", name="Test Product", barcode="12345", price=10.0, discount=0.0)
+        mock_product = Product(id="prod-1", name="Test Product",
+                               barcode="12345", price=10.0, discount=0.0)
 
         product_repository.get_one.return_value = mock_product
 
@@ -70,8 +73,10 @@ class TestProductService(unittest.TestCase):
         service = ProductService(product_repository=product_repository)
 
         mock_products = [
-            Product(id="prod-1", name="Product 1", barcode="12345", price=10.0, discount=0.0),
-            Product(id="prod-2", name="Product 2", barcode="67890", price=15.0, discount=0.0)
+            Product(id="prod-1", name="Product 1", barcode="12345",
+                    price=10.0, discount=0.0),
+            Product(id="prod-2", name="Product 2", barcode="67890",
+                    price=15.0, discount=0.0)
         ]
 
         product_repository.get_all.return_value = mock_products
@@ -85,11 +90,13 @@ class TestProductService(unittest.TestCase):
         product_repository = MagicMock(spec=IProductRepository)
         service = ProductService(product_repository=product_repository)
 
-        mock_product = Product(id="prod-1", name="Test Product", barcode="12345", price=10.0, discount=0.0)
+        mock_product = Product(id="prod-1", name="Test Product",
+                               barcode="12345", price=10.0, discount=0.0)
 
         service.update_product(mock_product, 20.0)
 
-        product_repository.update.assert_called_once_with(product_id="prod-1", price=20.0)
+        product_repository.update.assert_called_once_with(product_id="prod-1",
+                                                          price=20.0)
 
 
 if __name__ == "__main__":

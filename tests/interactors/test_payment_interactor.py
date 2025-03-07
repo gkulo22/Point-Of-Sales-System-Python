@@ -52,9 +52,11 @@ class TestPaymentInteractor:
 
         result = await interactor.execute_pay(receipt_id="dummy_receipt_id", to_currency=request.to_currency)
         assert result == 100.0
-        receipt_service.update_status.assert_called_once_with(receipt=dummy_receipt, status=False)
+        receipt_service.update_status.assert_called_once_with(receipt=dummy_receipt,
+                                                              status=False)
         shift_service.get_one_shift.assert_called_once_with(shift_id="shift_1")
-        shift_service.add_receipt.assert_called_once_with(receipt=dummy_receipt, shift=dummy_shift)
+        shift_service.add_receipt.assert_called_once_with(receipt=dummy_receipt,
+                                                          shift=dummy_shift)
 
     @pytest.mark.asyncio
     async def test_execute_pay_with_conversion(self) -> None:
@@ -78,11 +80,14 @@ class TestPaymentInteractor:
         )
 
         result = await interactor.execute_pay(receipt_id="dummy_receipt_id", to_currency=request.to_currency)
-        payment_service.pay.assert_awaited_once_with(from_currency="GEL", to_currency="USD", amount=180.0)
+        payment_service.pay.assert_awaited_once_with(from_currency="GEL",
+                                                     to_currency="USD", amount=180.0)
         assert result == 50.0
-        receipt_service.update_status.assert_called_once_with(receipt=dummy_receipt, status=False)
+        receipt_service.update_status.assert_called_once_with(receipt=dummy_receipt,
+                                                              status=False)
         shift_service.get_one_shift.assert_called_once_with(shift_id="shift_2")
-        shift_service.add_receipt.assert_called_once_with(receipt=dummy_receipt, shift=dummy_shift)
+        shift_service.add_receipt.assert_called_once_with(receipt=dummy_receipt,
+                                                          shift=dummy_shift)
 
 
 if __name__ == "__main__":

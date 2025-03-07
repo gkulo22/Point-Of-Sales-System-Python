@@ -31,13 +31,16 @@ def mock_product_service() -> MagicMock:
 
 
 @pytest.fixture
-def campaign_interactor(mock_campaign_service: MagicMock, mock_product_service: MagicMock) -> CampaignInteractor:
-    return CampaignInteractor(campaign_service=mock_campaign_service, product_service=mock_product_service)
+def campaign_interactor(mock_campaign_service: MagicMock,
+                        mock_product_service: MagicMock) -> CampaignInteractor:
+    return CampaignInteractor(campaign_service=mock_campaign_service,
+                              product_service=mock_product_service)
 
 
 # Test cases for CampaignInteractor methods
 class TestCampaignInteractor:
-    def test_execute_get_one(self, campaign_interactor: CampaignInteractor, mock_campaign_service: MagicMock) -> None:
+    def test_execute_get_one(self, campaign_interactor: CampaignInteractor,
+                             mock_campaign_service: MagicMock) -> None:
         campaign_id = "test_campaign_id"
         campaign = Campaign(id=campaign_id, campaign_type=CampaignType.DISCOUNT)
         mock_campaign_service.get_one_campaign.return_value = campaign
@@ -78,7 +81,9 @@ class TestCampaignInteractor:
         mock_campaign_service.create_combo.assert_called_once_with(combo_campaign=combo_campaign)
         assert result == combo_campaign
 
-    def test_execute_create_receipt_discount(self, campaign_interactor: CampaignInteractor, mock_campaign_service: MagicMock) -> None:
+    def test_execute_create_receipt_discount(self,
+                                             campaign_interactor: CampaignInteractor,
+                                             mock_campaign_service: MagicMock) -> None:
         discount = 30
         amount = 100
         receipt_campaign = ReceiptCampaign(id=NO_ID, campaign_type=CampaignType.RECEIPT_DISCOUNT, total=amount,
@@ -104,9 +109,13 @@ class TestCampaignInteractor:
 
         buy_n_get_n_campaign = BuyNGetNCampaign(
             id=NO_ID, campaign_type=CampaignType.BUY_N_GET_N,
-            buy_product=ProductForReceipt(id=buy_product.product_id, quantity=buy_product.num, price=10.0, total=20.0),
-            gift_product=ProductForReceipt(id=gift_product.product_id, quantity=gift_product.num, price=10.0,
-                                           total=10.0, discount_total=0)
+            buy_product=ProductForReceipt(id=buy_product.product_id,
+                                          quantity=buy_product.num,
+                                          price=10.0, total=20.0),
+            gift_product=ProductForReceipt(id=gift_product.product_id,
+                                           quantity=gift_product.num, price=10.0,
+                                           total=10.0,
+                                           discount_total=0)
         )
         mock_campaign_service.create_buy_n_get_n.return_value = buy_n_get_n_campaign
 
@@ -117,7 +126,8 @@ class TestCampaignInteractor:
         mock_campaign_service.create_buy_n_get_n.assert_called_once_with(buy_n_get_n_campaign=buy_n_get_n_campaign)
         assert result == buy_n_get_n_campaign
 
-    def test_execute_delete(self, campaign_interactor: CampaignInteractor, mock_campaign_service: MagicMock) -> None:
+    def test_execute_delete(self, campaign_interactor: CampaignInteractor,
+                            mock_campaign_service: MagicMock) -> None:
         campaign_id = "test_campaign_id"
         campaign_interactor.execute_delete(campaign_id)
         mock_campaign_service.delete_campaign.assert_called_once_with(campaign_id=campaign_id)
@@ -137,7 +147,8 @@ class TestCampaignInteractor:
         mock_product_service.get_one_product.return_value = product
         mock_campaign_service.add_product_in_combo.return_value = campaign
 
-        result = campaign_interactor.execute_adding_in_combo(campaign_id, product_id, quantity)
+        result = campaign_interactor.execute_adding_in_combo(campaign_id,
+                                                             product_id, quantity)
 
         mock_campaign_service.get_one_campaign.assert_called_once_with(campaign_id=campaign_id)
         mock_product_service.get_one_product.assert_called_once_with(product_id=product_id)
@@ -170,7 +181,8 @@ class TestCampaignInteractor:
     ) -> None:
         campaign_id = "test_discount_campaign"
         product_id = "test_product"
-        campaign = DiscountCampaign(id=campaign_id, campaign_type=CampaignType.DISCOUNT, discount=10, products=[])
+        campaign = DiscountCampaign(id=campaign_id, campaign_type=CampaignType.DISCOUNT,
+                                    discount=10, products=[])
         mock_campaign_service.get_one_campaign.return_value = campaign
         campaign_interactor.execute_delete_from_discount(campaign_id, product_id)
         mock_campaign_service.get_one_campaign.assert_called_once_with(campaign_id=campaign_id)

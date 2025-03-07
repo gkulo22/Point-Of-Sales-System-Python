@@ -37,7 +37,8 @@ class TestReceiptInteractor(unittest.TestCase):
         mock_shift = MagicMock()
         mock_shift.state = MagicMock()
         self.mock_shift_service.get_one_shift.return_value = mock_shift
-        self.mock_receipt_service.create_receipt.return_value = Receipt(id="receipt_1", shift_id=shift_id, items=[],
+        self.mock_receipt_service.create_receipt.return_value = Receipt(id="receipt_1",
+                                                                        shift_id=shift_id, items=[],
                                                                         total=0.0)
 
         result = self.receipt_interactor.execute_create(shift_id)
@@ -51,7 +52,8 @@ class TestReceiptInteractor(unittest.TestCase):
 
     def test_execute_get_one(self) -> None:
         receipt_id = "receipt_1"
-        expected_receipt = Receipt(id=receipt_id, shift_id="shift_1", items=[], total=0.0)
+        expected_receipt = Receipt(id=receipt_id, shift_id="shift_1",
+                                   items=[], total=0.0)
 
         # Mock the return value correctly
         self.mock_receipt_service.get_one_receipt.return_value = expected_receipt
@@ -91,7 +93,8 @@ class TestReceiptInteractor(unittest.TestCase):
         self.mock_product_service.get_one_product.assert_called_once_with(product_id="prod-1")
         self.mock_campaign_service.get_campaign_product.assert_called_once_with(product=mock_product)
         self.mock_receipt_service.get_one_receipt.assert_called_once_with(receipt_id="receipt-1")
-        self.mock_receipt_service.add_product.assert_called_once_with(receipt=mock_receipt, product=mock_product,
+        self.mock_receipt_service.add_product.assert_called_once_with(receipt=mock_receipt,
+                                                                      product=mock_product,
                                                                       quantity=2)
         self.mock_campaign_service.get_campaign_receipt.assert_called_once_with(receipt=mock_receipt)
 
@@ -115,7 +118,8 @@ class TestReceiptInteractor(unittest.TestCase):
         self.mock_receipt_service.add_combo_product.return_value = mock_receipt
         self.mock_campaign_service.get_campaign_receipt.return_value = mock_receipt
 
-        result = self.receipt_interactor.execute_addition_combo("receipt-1", "combo-1", 2)
+        result = self.receipt_interactor.execute_addition_combo("receipt-1",
+                                                                "combo-1", 2)
 
         self.mock_campaign_service.get_one_campaign.assert_called_once_with(campaign_id="combo-1")
         self.mock_receipt_service.get_one_receipt.assert_called_once_with(receipt_id="receipt-1")
@@ -127,8 +131,10 @@ class TestReceiptInteractor(unittest.TestCase):
 
     def test_execute_addition_gift(self) -> None:
         # Create proper ProductForReceipt objects for buy_product and gift_product
-        buy_product = ProductForReceipt(id="prod-1", quantity=2, price=10.0, total=20.0)
-        gift_product = ProductForReceipt(id="prod-2", quantity=1, price=5.0, total=5.0, discount_total=0)
+        buy_product = ProductForReceipt(id="prod-1", quantity=2,
+                                        price=10.0, total=20.0)
+        gift_product = ProductForReceipt(id="prod-2", quantity=1,
+                                         price=5.0, total=5.0, discount_total=0)
 
         mock_gift = BuyNGetNCampaign(
             id="gift-1",
@@ -147,7 +153,8 @@ class TestReceiptInteractor(unittest.TestCase):
 
         self.mock_campaign_service.get_one_campaign.assert_called_once_with(campaign_id="gift-1")
         self.mock_receipt_service.get_one_receipt.assert_called_once_with(receipt_id="receipt-1")
-        self.mock_receipt_service.add_gift_product.assert_called_once_with(receipt=mock_receipt, gift=mock_gift,
+        self.mock_receipt_service.add_gift_product.assert_called_once_with(receipt=mock_receipt,
+                                                                           gift=mock_gift,
                                                                            quantity=2)
         self.mock_campaign_service.get_campaign_receipt.assert_called_once_with(receipt=mock_receipt)
 

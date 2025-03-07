@@ -43,8 +43,10 @@ class TestReport(unittest.TestCase):
             items=[self.product2_receipt2],
             total=15.0
         )
-        self.shift1 = DummyShift(id="s1", receipts=[self.receipt1], state="some_state_value")
-        self.shift2 = DummyShift(id="s2", receipts=[self.receipt2], state="some_state_value")
+        self.shift1 = DummyShift(id="s1",
+                                 receipts=[self.receipt1], state="some_state_value")
+        self.shift2 = DummyShift(id="s2",
+                                 receipts=[self.receipt2], state="some_state_value")
         self.dummy_shift_service = DummyShiftService(shifts=[self.shift1, self.shift2])
 
     def test_xreport_make_report(self) -> None:

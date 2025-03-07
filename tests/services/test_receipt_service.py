@@ -58,7 +58,8 @@ class TestReceiptService(unittest.TestCase):
         receipt_repository = MagicMock(spec=IReceiptRepository)
         service = ReceiptService(receipt_repository=receipt_repository)
 
-        mock_receipt = Receipt(id="receipt-1", shift_id="shift-1", items=[], total=0.0, status=True)
+        mock_receipt = Receipt(id="receipt-1", shift_id="shift-1",
+                               items=[], total=0.0, status=True)
         receipt_repository.delete.return_value = None
 
         service.delete_receipt(mock_receipt)
@@ -69,8 +70,10 @@ class TestReceiptService(unittest.TestCase):
         receipt_repository = MagicMock(spec=IReceiptRepository)
         service = ReceiptService(receipt_repository=receipt_repository)
 
-        mock_product = Product(id="prod-1", name="Test Product", barcode="12345", price=10.0, discount=0.0)
-        mock_receipt = Receipt(id="receipt-1", shift_id="shift-1", items=[], total=0.0)
+        mock_product = Product(id="prod-1", name="Test Product",
+                               barcode="12345", price=10.0, discount=0.0)
+        mock_receipt = Receipt(id="receipt-1", shift_id="shift-1",
+                               items=[], total=0.0)
 
         receipt_repository.add_product.return_value = mock_receipt
 
@@ -84,7 +87,8 @@ class TestReceiptService(unittest.TestCase):
         service = ReceiptService(receipt_repository=receipt_repository)
 
         # Fix: Use an actual CampaignType enum value instead of the class itself
-        mock_combo = ComboCampaign(id="combo-1", campaign_type=CampaignType.COMBO, products=[], discount=5.0)
+        mock_combo = ComboCampaign(id="combo-1", campaign_type=CampaignType.COMBO,
+                                   products=[], discount=5.0)
         mock_receipt = Receipt(id="receipt-1", shift_id="shift-1", items=[], total=0.0)
 
         receipt_repository.add_product.return_value = mock_receipt
@@ -97,7 +101,8 @@ class TestReceiptService(unittest.TestCase):
     def test_delete_receipt_closed(self) -> None:
         receipt_repository = MagicMock(spec=IReceiptRepository)
         service = ReceiptService(receipt_repository=receipt_repository)
-        mock_receipt = Receipt(id="receipt-1", shift_id="shift-1", items=[], total=0.0, status=False)
+        mock_receipt = Receipt(id="receipt-1", shift_id="shift-1",
+                               items=[], total=0.0, status=False)
 
         with pytest.raises(ReceiptClosedErrorMessage):
             service.delete_receipt(mock_receipt)
@@ -120,13 +125,15 @@ class TestReceiptService(unittest.TestCase):
 
         service.update_status(mock_receipt, False)
         mock_state.close_receipt.assert_called_once_with(receipt=mock_receipt)
-        receipt_repository.update.assert_called_once_with(receipt_id="receipt-1", status=False)
+        receipt_repository.update.assert_called_once_with(receipt_id="receipt-1",
+                                                          status=False)
 
     def test_add_product_zero_quantity(self) -> None:
         receipt_repository = MagicMock(spec=IReceiptRepository)
         service = ReceiptService(receipt_repository=receipt_repository)
 
-        mock_product = Product(id="prod-1", name="Test Product", barcode="12345", price=10.0, discount=None)
+        mock_product = Product(id="prod-1", name="Test Product",
+                               barcode="12345", price=10.0, discount=None)
         mock_receipt = MagicMock(spec=Receipt)
         mock_state = MagicMock()
         mock_receipt.get_state.return_value = mock_state
@@ -139,11 +146,15 @@ class TestReceiptService(unittest.TestCase):
         service = ReceiptService(receipt_repository=receipt_repository)
 
         # Create ProductForReceipt objects instead of using Product directly
-        mock_product = Product(id="prod-1", name="Test Product", barcode="12345", price=10.0, discount=0.0)
-        mock_gift_product = Product(id="gift-1", name="Gift Product", barcode="67890", price=5.0, discount=0.0)
+        mock_product = Product(id="prod-1", name="Test Product",
+                               barcode="12345", price=10.0, discount=0.0)
+        mock_gift_product = Product(id="gift-1", name="Gift Product",
+                                    barcode="67890", price=5.0, discount=0.0)
 
-        product_for_receipt = ProductForReceipt(id=mock_product.id, quantity=1, price=mock_product.price)
-        gift_for_receipt = ProductForReceipt(id=mock_gift_product.id, quantity=1, price=mock_gift_product.price)
+        product_for_receipt = ProductForReceipt(id=mock_product.id,
+                                                quantity=1, price=mock_product.price)
+        gift_for_receipt = ProductForReceipt(id=mock_gift_product.id,
+                                             quantity=1, price=mock_gift_product.price)
 
         # Fix campaign_type and use ProductForReceipt objects
         mock_gift = BuyNGetNCampaign(
@@ -171,7 +182,8 @@ class TestReceiptService(unittest.TestCase):
         mock_receipt.get_state.return_value = mock_state
 
         service.delete_item(mock_receipt, "item-1")
-        mock_state.delete_item.assert_called_once_with(receipt=mock_receipt, item_id="item-1")
+        mock_state.delete_item.assert_called_once_with(receipt=mock_receipt,
+                                                       item_id="item-1")
         receipt_repository.delete_item.assert_called_once_with(receipt=mock_receipt)
 
 

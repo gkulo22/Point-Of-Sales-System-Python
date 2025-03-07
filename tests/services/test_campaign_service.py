@@ -68,7 +68,8 @@ class IComboCampaignRepository(Protocol):
     def create(self, combo_campaign: ComboCampaign) -> ComboCampaign:
         ...
 
-    def add_product(self, product: ProductForReceipt, campaign_id: str) -> ComboCampaign:
+    def add_product(self, product: ProductForReceipt,
+                    campaign_id: str) -> ComboCampaign:
         ...
 
     def get_all(self) -> List[ComboCampaign]:
@@ -141,7 +142,10 @@ class MockComboCampaignRepository(IComboCampaignRepository):
         return combo_campaign
 
     def add_product(self, product: ProductForReceipt, campaign_id: str) -> ComboCampaign:
-        return ComboCampaign(id=campaign_id, campaign_type=CampaignType.COMBO, discount=10, products=[product])
+        return ComboCampaign(id=campaign_id,
+                             campaign_type=CampaignType.COMBO,
+                             discount=10,
+                             products=[product])
 
     def get_all(self) -> List[ComboCampaign]:
         return []
@@ -206,12 +210,6 @@ class TestCampaignService(unittest.TestCase):
 
     def test_get_campaign_receipt_with_discount(self) -> None:
         receipt = Receipt(id="123", shift_id="1", items=[], total=0.0)
-
-        # Create ProductForReceipt objects instead of strings
-        product1 = ProductForReceipt(id="p1", quantity=1, price=100)
-        product2 = ProductForReceipt(id="p2", quantity=1, price=100)
-
-        # Use MagicMock instead of assigning to method
         mock_repo = MagicMock()
         mock_repo.get_discount_on_amount.return_value = ReceiptCampaign(
             id="c1", campaign_type=CampaignType.DISCOUNT, total=200, discount=20
@@ -267,12 +265,15 @@ class TestCampaignService(unittest.TestCase):
         # Replace the repo with our mock
         self.campaign_service.combo_campaign_repo = mock_repo
 
-        result = self.campaign_service.add_product_in_combo(product=product, quantity=2, campaign_id="c1")
+        result = self.campaign_service.add_product_in_combo(product=product,
+                                                            quantity=2,
+                                                            campaign_id="c1")
         self.assertEqual(result.id, "c1")
         self.assertEqual(len(result.products), 1)
 
     def test_add_product_in_discount(self) -> None:
-        result = self.campaign_service.add_product_in_discount(product_id="p1", campaign_id="c1")
+        result = self.campaign_service.add_product_in_discount(product_id="p1",
+                                                               campaign_id="c1")
         self.assertEqual(result.id, "c1")
         self.assertEqual(result.products, ["p1"])
 
@@ -299,8 +300,10 @@ class TestCampaignService(unittest.TestCase):
         mock_repo = MagicMock()
         self.campaign_service.product_discount_repo = mock_repo
 
-        self.campaign_service.execute_delete_from_discount(campaign_id="c1", product_id="p1")
-        mock_repo.delete_product.assert_called_once_with(product_id="p1", campaign_id="c1")
+        self.campaign_service.execute_delete_from_discount(campaign_id="c1",
+                                                           product_id="p1")
+        mock_repo.delete_product.assert_called_once_with(product_id="p1",
+                                                         campaign_id="c1")
 
     def test_get_all_campaigns(self) -> None:
         discount_campaign = DiscountCampaign(
@@ -375,7 +378,8 @@ class TestCampaignServiceAdditional(unittest.TestCase):
         )
 
     def test_create_discount_campaign(self) -> None:
-        discount_campaign = DiscountCampaign(id="c1", campaign_type=CampaignType.DISCOUNT, discount=10,
+        discount_campaign = DiscountCampaign(id="c1",
+                                             campaign_type=CampaignType.DISCOUNT, discount=10,
                                              products=["p1"])
 
         result = self.campaign_service.create_discount(discount_campaign)
@@ -428,7 +432,9 @@ class TestCampaignServiceAdditional(unittest.TestCase):
 
     def test_get_one_discount_campaign(self) -> None:
         # Create a mock discount campaign
-        discount_campaign = DiscountCampaign(id="c1", campaign_type=CampaignType.DISCOUNT, discount=10,
+        discount_campaign = DiscountCampaign(id="c1",
+                                             campaign_type=CampaignType.DISCOUNT,
+                                             discount=10,
                                              products=["p1"])
 
         # Create a mock repo

@@ -28,10 +28,14 @@ class DummyProduct(ICalculatePrice):
 
 class TestICalculatePrice(unittest.TestCase):
     def setUp(self) -> None:
-        self.product = DummyProduct(id="p1", price=100.0, discounted_price=80.0)
-        self.no_discount_product = DummyProduct(id="p2", price=100.0, discounted_price=None)
-        self.zero_discount_product = DummyProduct(id="p3", price=100.0, discounted_price=100.0)
-        self.high_discount_product = DummyProduct(id="p4", price=100.0, discounted_price=50.0)
+        self.product = DummyProduct(id="p1", price=100.0,
+                                    discounted_price=80.0)
+        self.no_discount_product = DummyProduct(id="p2", price=100.0,
+                                                discounted_price=None)
+        self.zero_discount_product = DummyProduct(id="p3", price=100.0,
+                                                  discounted_price=100.0)
+        self.high_discount_product = DummyProduct(id="p4", price=100.0,
+                                                  discounted_price=50.0)
 
     def test_get_price(self) -> None:
         self.assertEqual(self.product.get_price(), 100.0)

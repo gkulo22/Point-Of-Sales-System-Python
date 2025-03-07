@@ -64,7 +64,8 @@ class TestShiftService(unittest.TestCase):
 
     def test_add_receipt(self) -> None:  # Added return type
         shift = Shift(id="s1", state=Mock(), receipts=[])
-        receipt = Receipt(id="r1", shift_id="1", items=[], total=100.0, discount_total=None)
+        receipt = Receipt(id="r1", shift_id="1",
+                          items=[], total=100.0, discount_total=None)
 
         # Fix: proper way to mock a method
         shift.state.add_item = Mock()

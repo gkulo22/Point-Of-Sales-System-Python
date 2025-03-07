@@ -60,7 +60,6 @@ class TestReceiptState(unittest.TestCase):
         self.item1 = MockItem(id="i1", quantity=2, total=100.0, discount_total=80.0)
         self.item2 = MockItem(id="i2", quantity=1, total=50.0)
 
-        # Create receipts with proper status flag and let get_state() handle the state creation
         self.open_receipt = MockReceipt(id="r1", items=[self.item1], status=True)
         self.closed_receipt = MockReceipt(id="r2", items=[self.item1], status=False)
 
@@ -69,7 +68,8 @@ class TestReceiptState(unittest.TestCase):
 
         # Use get_state() to get the state object
         receipt_state = self.open_receipt.get_state()
-        updated_receipt = receipt_state.add_item(receipt=self.open_receipt, item_for_receipt=new_item)
+        updated_receipt = receipt_state.add_item(receipt=self.open_receipt,
+                                                 item_for_receipt=new_item)
 
         self.assertEqual(len(updated_receipt.items), 2)
         self.assertEqual(updated_receipt.items[-1].id, "i3")
@@ -79,7 +79,8 @@ class TestReceiptState(unittest.TestCase):
 
         # Use get_state() to get the state object
         receipt_state = self.open_receipt.get_state()
-        updated_receipt = receipt_state.add_item(receipt=self.open_receipt, item_for_receipt=existing_item)
+        updated_receipt = receipt_state.add_item(receipt=self.open_receipt,
+                                                 item_for_receipt=existing_item)
 
         # Safely access attributes by using concrete types that have these attributes
         item = cast(MockItem, updated_receipt.items[0])
@@ -93,7 +94,8 @@ class TestReceiptState(unittest.TestCase):
 
         # Use get_state() to get the state object
         receipt_state = self.open_receipt.get_state()
-        updated_receipt = receipt_state.delete_item(receipt=self.open_receipt, item_id="i1")
+        updated_receipt = receipt_state.delete_item(receipt=self.open_receipt,
+                                                    item_id="i1")
 
         # Safely access attributes by using concrete types that have these attributes
         updated_item = cast(MockItem, updated_receipt.items[0])
@@ -102,7 +104,8 @@ class TestReceiptState(unittest.TestCase):
 
         # Get state from the updated receipt
         updated_state = updated_receipt.get_state()
-        updated_receipt2 = updated_state.delete_item(receipt=updated_receipt, item_id="i1")
+        updated_receipt2 = updated_state.delete_item(receipt=updated_receipt,
+                                                     item_id="i1")
         self.assertEqual(len(updated_receipt2.items), 0)
 
     def test_open_receipt_delete_item_not_found(self) -> None:
@@ -129,7 +132,8 @@ class TestReceiptState(unittest.TestCase):
         # Use get_state() to get the state object
         receipt_state = self.closed_receipt.get_state()
         with self.assertRaises(ReceiptClosedErrorMessage):
-            receipt_state.add_item(receipt=self.closed_receipt, item_for_receipt=new_item)
+            receipt_state.add_item(receipt=self.closed_receipt,
+                                   item_for_receipt=new_item)
 
     def test_closed_receipt_delete_item(self) -> None:
         # Use get_state() to get the state object
